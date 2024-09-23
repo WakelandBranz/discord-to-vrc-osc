@@ -1,0 +1,17 @@
+[auth]
+token = "MTI1MDkwNTE5NjgxMzQ4NDEwMg.GhIAna.DGqUfzoxSwwZSFugtT04Gb9v2SRQL72jYlOeao" # String
+owners = ["239561212818489344", ""] # Array of strings -- Remove my UID when running this
+
+[options]
+prefixes = ["!", "."] # WIP
+mention_as_prefix = true # Boolean
+
+[system]
+ephemeral_admin_commands = true # Can be dynamically updated
+vrc_client_logging_channel = "" # WIP
+
+[vrc_client]
+localhost = "127.0.0.1" # WIP
+receiver_port = 9001 # Default is 9001
+transmitter_port = 9000 # Default is 9000
+

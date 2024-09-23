@@ -1,0 +1,18 @@
+[package]
+name = "discord-to-vrc-osc"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
+poise = "0.6.1"
+serenity = "0.12.2"
+reqwest = "0.12.7"
+env_logger = "0.11.3"
+
+serde = "1.0.203"
+toml = "0.8.14"
+
+log = "0.4.22"
+
+rosc = "0.10.1"
