@@ -22,6 +22,7 @@ pub struct Auth {
 pub struct Options {
     pub prefixes: Vec<String>,
     pub mention_as_prefix: bool,
+    pub message: String, // Implemented in some test variations
 }
 
 #[derive(Deserialize, Serialize)]

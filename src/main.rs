@@ -55,6 +55,7 @@ async fn main() {
 
     // Wrap the config in an Arc<Mutex<>>
     let config = Arc::new(Mutex::new(config));
+    let config_clone = Arc::clone(&config); // For other tasks
 
     // Use config to construct VRChat client
     let receiver_port = config.lock().unwrap().vrc_client.receiver_port;
@@ -183,7 +184,10 @@ async fn main() {
 
             // Makes character jump
             if action.jump.unwrap_or(false) {
-                vrc_client.input_jump();
+                let vrc_client_clone = Arc::clone(&vrc_client);
+                tokio::spawn(async move {
+                    vrc_client_clone.input_jump();
+                });
             }
         }
     });
@@ -191,10 +195,13 @@ async fn main() {
     // Second tokio::spawn (message spammer)
     let vrc_client_clone = Arc::clone(&vrc_client);
     tokio::spawn(async move {
+        let vrc_client = Arc::clone(&vrc_client_clone);
+        let config = Arc::new(&config_clone);
         loop {
-            let vrc_client = Arc::clone(&vrc_client_clone);
-            vrc_client.chatbox_message("Hello! I am a bot which you can control. Test me out on discord: P9ghdyTtC8");
+            let message = config.lock().unwrap().options.message.clone();
+            vrc_client.chatbox_message(&message);
             tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+            config.lock().unwrap().update();
         }
     });
 
