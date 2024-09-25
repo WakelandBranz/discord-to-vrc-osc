@@ -9,9 +9,24 @@ async fn send_action(ctx: Context<'_>, action: vrc_client::Action) -> Result<(),
 
     match ctx.data().vrc_transmitter.send(action.clone()).await {
         Ok(_) => {
+            // Format type of action performed
+            // TODO: Make this not buns
+            let mut action_type: String = String::from("");
+            if action.clone().movement != None {
+                action_type += action.clone().movement.unwrap().as_str();
+            }
+            if action.clone().look != None {
+                action_type += action.clone().look.unwrap().as_str();
+            }
+            if action.clone().jump != None {
+                action_type += "jump";
+            }
+            if action.clone().run != None {
+                action_type += "run"
+            }
             reply_embed = reply_embed
                 .title("Successfully sent action")
-                .field("**Caller**", format!("{} ({})\nAction: {:?}", ctx.author().name, ctx.author().id, action), false)
+                .field("**Caller**", format!("{} ({})\nAction type: {}\nAction duration: {}", ctx.author().name, ctx.author().id, action_type, action.duration), false)
                 .color(Color::DARK_GREEN)
                 .thumbnail(ctx.author().face())
                 .timestamp(Timestamp::now());
@@ -30,10 +45,10 @@ async fn send_action(ctx: Context<'_>, action: vrc_client::Action) -> Result<(),
     Ok(())
 }
 
-/// Sends a move action to the bot VRChat client
+/// Sends a move input to the bot VRChat client
 /// Directions: Forward, Backward, Left, Right
 #[poise::command(prefix_command, slash_command)]
-pub async fn action_move(
+pub async fn move_horizontal(
     ctx: Context<'_>,
     #[description = "Direction to move"] direction: String,
     #[description = "Duration to move in direction"] duration: u64,
@@ -48,10 +63,10 @@ pub async fn action_move(
     send_action(ctx, action).await
 }
 
-/// Sends a look action to the bot VRChat client
+/// Sends a look input to the bot VRChat client
 /// Directions: Left, Right
 #[poise::command(prefix_command, slash_command)]
-pub async fn action_look(
+pub async fn look(
     ctx: Context<'_>,
     #[description = "Direction to move view angle"] direction: String,
     #[description = "Duration to move view angle in specified direction"] duration: u64,
@@ -66,9 +81,9 @@ pub async fn action_look(
     send_action(ctx, action).await
 }
 
-/// Sends a run action to the bot VRChat client
+/// Sends a run input to the bot VRChat client
 #[poise::command(prefix_command, slash_command)]
-pub async fn action_run(
+pub async fn run(
     ctx: Context<'_>,
     #[description = "Duration to run"] duration: u64,
 ) -> Result<(), Error> {
@@ -82,9 +97,9 @@ pub async fn action_run(
     send_action(ctx, action).await
 }
 
-/// Sends a jump action to the bot VRChat client
+/// Sends a jump input to the bot VRChat client
 #[poise::command(prefix_command, slash_command)]
-pub async fn action_jump(ctx: Context<'_>) -> Result<(), Error> {
+pub async fn jump(ctx: Context<'_>) -> Result<(), Error> {
     let action = vrc_client::Action {
         duration: 0,
         movement: None,
