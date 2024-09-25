@@ -71,10 +71,10 @@ async fn main() {
         commands: vec![
             commands::register(),
             commands::shutdown(),
-            commands::vrc::action_move(),
-            commands::vrc::action_look(),
-            commands::vrc::action_run(),
-            commands::vrc::action_jump(),
+            commands::vrc::move_horizontal(),
+            commands::vrc::look(),
+            commands::vrc::run(),
+            commands::vrc::jump(),
             commands::vrc::action_combined(),
         ],
         prefix_options: poise::PrefixFrameworkOptions {
@@ -147,6 +147,7 @@ async fn main() {
         .await;
 
     // First tokio::spawn (movement handler)
+    // All spawned tasks allow for asynchronous movement queuing
     let vrc_client_clone = Arc::clone(&vrc_client);
     tokio::spawn(async move {
         let vrc_client = Arc::clone(&vrc_client_clone);
@@ -156,6 +157,7 @@ async fn main() {
             if let Some(movement) = action.movement {
                 vrc_client.input_move(&movement, true);
                 let vrc_client_clone = Arc::clone(&vrc_client);
+                // Timer for asynchronous actions
                 tokio::spawn(async move {
                     tokio::time::sleep(std::time::Duration::from_secs(action.duration)).await;
                     vrc_client_clone.input_move(&movement, false);
@@ -166,6 +168,7 @@ async fn main() {
             if let Some(look) = action.look {
                 vrc_client.input_look(&look, true);
                 let vrc_client_clone = Arc::clone(&vrc_client);
+                // Timer for asynchronous actions
                 tokio::spawn(async move {
                     tokio::time::sleep(std::time::Duration::from_secs(action.duration)).await;
                     vrc_client_clone.input_look(&look, false);
@@ -176,6 +179,7 @@ async fn main() {
             if let Some(_) = action.run {
                 vrc_client.input_run(1);
                 let vrc_client_clone = Arc::clone(&vrc_client);
+                // Timer for asynchronous actions
                 tokio::spawn(async move {
                     tokio::time::sleep(std::time::Duration::from_secs(action.duration)).await;
                     vrc_client_clone.input_run(0);
