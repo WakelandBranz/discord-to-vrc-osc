@@ -1,3 +1,6 @@
+// TODO: Process all sensitive information with a .env file instead of through the toml
+// TODO: Process all config information with a yaml file to eventually make this project work with docker
+
 #![warn(clippy::str_to_string)]
 
 // Functionality imports
