@@ -83,6 +83,8 @@ Note: Some features (marked as WIP) are still in development and may not be full
 
 All commands can be used with either a slash command (`/`) or a prefix command (e.g., `!`), depending on your preference and configuration settings.
 
+Parameters not marked as optional are required, commands executed without required parameters will fail.
+
 ### 1. Move Horizontally
 - Command: `/move_horizontal` or `!move_horizontal`
 - Description: Moves the character horizontally in the specified direction.
