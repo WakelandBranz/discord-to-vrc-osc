@@ -1,19 +1,20 @@
 # RENAME THIS TO 'config.toml' IF YOU ARE RUNNING THIS YOURSELF
 
 [auth]
-token = "" # String
-owners = ["239561212818489344", ""] # Array of strings -- Remove my UID when running this
+token = ""  # Your Discord bot token
+owners = ["239561212818489344", ""]  # Array of user IDs with owner privileges
 
 [options]
-prefixes = ["!", "."] # WIP
-mention_as_prefix = true # Boolean
+prefixes = ["!", ".", "?", "~"]  # Prefixes for text commands
+mention_as_prefix = true  # Allow mentioning the bot as a command prefix
+message = ""  # Custom message (used for development)
 
 [system]
-ephemeral_admin_commands = true # Can be dynamically updated
-vrc_client_logging_channel = "" # WIP
+ephemeral_admin_commands = true  # Whether admin commands are visible only to the user
+vrc_client_logging_channel = ""  # Discord channel ID for VRChat client logging (WIP)
 
 [vrc_client]
-localhost = "127.0.0.1" # WIP
-receiver_port = 9001 # Default is 9001
-transmitter_port = 9000 # Default is 9000
+localhost = "127.0.0.1"  # IP address for VRChat client communication
+receiver_port = 9001  # Port for receiving OSC messages (default: 9001)
+transmitter_port = 9000  # Port for sending OSC messages (default: 9000)
 
