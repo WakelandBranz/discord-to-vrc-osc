@@ -25,6 +25,7 @@ type Context<'a> = poise::Context<'a, Data, Error>;
 // Custom user data passed to all command functions
 pub struct Data {
     config: Arc<Mutex<config::Config>>,
+    vrc_client: Arc<vrc_client::client::Client>,
     vrc_transmitter: tokio::sync::mpsc::Sender<Action>,
 }
 
@@ -65,6 +66,8 @@ async fn main() {
     let transmitter_port = config.lock().unwrap().vrc_client.transmitter_port;
 
     let vrc_client = Arc::new(vrc_client::client::Client::new(receiver_port, transmitter_port));
+    let vrc_client_ref1 = Arc::clone(&vrc_client);
+    let vrc_client_ref2 = Arc::clone(&vrc_client);
 
     let (vrc_transmitter, mut vrc_receiver) = mpsc::channel::<Action>(64);
 
@@ -79,6 +82,7 @@ async fn main() {
             commands::vrc::run(),
             commands::vrc::jump(),
             commands::vrc::action_combined(),
+            commands::vrc::chatbox(),
         ],
         prefix_options: poise::PrefixFrameworkOptions {
             //edit_tracker: Some(Arc::new(poise::EditTracker::for_timespan(
@@ -135,6 +139,7 @@ async fn main() {
                 poise::builtins::register_globally(ctx, &framework.options().commands).await?;
                 Ok(Data {
                     config,
+                    vrc_client: Arc::clone(&vrc_client),
                     vrc_transmitter,
                 })
             })
@@ -149,11 +154,12 @@ async fn main() {
         .framework(framework)
         .await;
 
+
+    // TODO: Migrate task system to spawn_blocking since this is just a stupid solution quite frankly
     // First tokio::spawn (movement handler)
     // All spawned tasks allow for asynchronous movement queuing
-    let vrc_client_clone = Arc::clone(&vrc_client);
     tokio::spawn(async move {
-        let vrc_client = Arc::clone(&vrc_client_clone);
+        let vrc_client = Arc::clone(&vrc_client_ref1);
         while let Some(action) = vrc_receiver.recv().await {
 
             // Horizontal character movement
@@ -200,9 +206,8 @@ async fn main() {
     });
 
     // Second tokio::spawn (message spammer)
-    let vrc_client_clone = Arc::clone(&vrc_client);
     tokio::spawn(async move {
-        let vrc_client = Arc::clone(&vrc_client_clone);
+        let vrc_client = Arc::clone(&vrc_client_ref2);
         let config = Arc::new(&config_clone);
         loop {
             let message = config.lock().unwrap().options.message.clone();

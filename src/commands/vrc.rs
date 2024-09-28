@@ -1,7 +1,9 @@
+use std::arch::x86_64::_mm_extract_si64;
 use poise::serenity_prelude::{CreateEmbed, Color, Timestamp};
 use poise::CreateReply;
 use crate::{Context, Error};
 use crate::vrc_client;
+use crate::vrc_client::traits::Input;
 
 /// Helper function for all actions
 async fn send_action(ctx: Context<'_>, action: vrc_client::Action) -> Result<(), Error> {
@@ -13,10 +15,10 @@ async fn send_action(ctx: Context<'_>, action: vrc_client::Action) -> Result<(),
             // TODO: Make this not buns
             let mut action_type: String = String::from("");
             if action.clone().movement != None {
-                action_type += action.clone().movement.unwrap().as_str();
+                action_type += action.clone().movement.unwrap().to_lowercase().as_str();
             }
             if action.clone().look != None {
-                action_type += action.clone().look.unwrap().as_str();
+                action_type += action.clone().look.unwrap().to_lowercase().as_str();
             }
             if action.clone().jump != None {
                 action_type += "jump";
@@ -128,4 +130,25 @@ pub async fn action_combined(
         jump,
     };
     send_action(ctx, action).await
+}
+
+// TODO: Rewrite action handling system so that I can avoid a big code block in my main function, maybe write a handler function?
+/// Sends a message to the VRChat chatbox
+#[poise::command(prefix_command, slash_command, owners_only)]
+pub async fn chatbox(
+    ctx: Context<'_>,
+    #[description = "Sends a message to the client's chatbox (144 char limit)"] message: String,
+) -> Result<(), Error> {
+    ctx.data().vrc_client.chatbox_message(&message.as_str());
+
+    let reply_embed = CreateEmbed::default()
+        .title("Sent chatbox message".to_string())
+        .field("**Caller**".to_string(), format!("{} ({})\nMessage: {}", ctx.author().name, ctx.author().id, message), false)
+        .color(Color::DARK_GREEN)
+        .thumbnail(ctx.author().face())
+        .timestamp(Timestamp::now());
+
+    ctx.send(CreateReply::default().embed(reply_embed)).await?;
+
+    Ok(())
 }
