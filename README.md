@@ -9,9 +9,10 @@ A highly performant Discord bot that leverages VRChat's Open Sound Control (OSC)
 4. [Configuration](#configuration)
 5. [Available Commands](#available-commands)
 6. [Usage Examples](#usage-examples)
-7. [Security Considerations](#security-considerations)
-8. [Contributing](#contributing)
-9. [License](#license)
+7. [Showcase](#showcase)
+8. [Security Considerations](#security-considerations)
+9. [Contributing](#contributing)
+10. [License](#license)
 
 ## Features
 
@@ -83,8 +84,6 @@ Note: Some features (marked as WIP) are still in development and may not be full
 
 All commands can be used with either a slash command (`/`) or a prefix command (e.g., `!`), depending on your preference and configuration settings.
 
-Parameters not marked as optional are required, commands executed without required parameters will fail.
-
 ### 1. Move Horizontally
 - Command: `/move_horizontal` or `!move_horizontal`
 - Description: Moves the character horizontally in the specified direction.
@@ -147,11 +146,21 @@ Parameters not marked as optional are required, commands executed without requir
    /action_combined movement:Forward look:Right run:true duration:3
    ```
 
+## Showcase
+
+Check this out in action:
+
+(https://www.youtube.com/watch?v=Sm2hXsnTQao)
+
 ## Security Considerations
 
 - Ensure that only trusted users have access to the Discord channel where the bot is active.
 - Regularly review the bot's audit logs for any suspicious activity.
 - Keep your Discord bot token secure and never share it publicly.
+
+## Contributing
+
+[Add information about how others can contribute to the project]
 
 ## License
 
