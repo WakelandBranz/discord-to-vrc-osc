@@ -205,17 +205,17 @@ async fn main() {
         }
     });
 
-    // Second tokio::spawn (message spammer)
-    tokio::spawn(async move {
-        let vrc_client = Arc::clone(&vrc_client_ref2);
-        let config = Arc::new(&config_clone);
-        loop {
-            let message = config.lock().unwrap().options.message.clone();
-            vrc_client.chatbox_message(&message);
-            tokio::time::sleep(std::time::Duration::from_secs(3)).await;
-            config.lock().unwrap().update();
-        }
-    });
+    // Second tokio::spawn (message spammer) BAD CODE REMOVE LATER
+    //tokio::spawn(async move {
+    //    let vrc_client = Arc::clone(&vrc_client_ref2);
+    //    let config = Arc::new(&config_clone);
+    //    loop {
+    //        let message = config.lock().unwrap().options.message.clone();
+    //        vrc_client.chatbox_message(&message);
+    //        tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+    //        config.lock().unwrap().update();
+    //    }
+    //});
 
     client.unwrap().start().await.unwrap()
 }

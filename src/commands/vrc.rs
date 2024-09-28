@@ -20,7 +20,7 @@ async fn send_action(ctx: Context<'_>, action: vrc_client::Action) -> Result<(),
             if action.clone().look != None {
                 action_type += action.clone().look.unwrap().to_lowercase().as_str();
             }
-            if action.clone().jump != None {
+            if action.clone().jump != None && action.clone().jump.unwrap() == true {
                 action_type += "jump";
             }
             if action.clone().run != None {
