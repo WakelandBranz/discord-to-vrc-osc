@@ -11,8 +11,7 @@ A highly performant Discord bot that leverages VRChat's Open Sound Control (OSC)
 6. [Usage Examples](#usage-examples)
 7. [Showcase](#showcase)
 8. [Security Considerations](#security-considerations)
-9. [Contributing](#contributing)
-10. [License](#license)
+9. [License](#license)
 
 ## Features
 
@@ -157,10 +156,6 @@ Check this out in action:
 - Ensure that only trusted users have access to the Discord channel where the bot is active.
 - Regularly review the bot's audit logs for any suspicious activity.
 - Keep your Discord bot token secure and never share it publicly.
-
-## Contributing
-
-[Add information about how others can contribute to the project]
 
 ## License
 
